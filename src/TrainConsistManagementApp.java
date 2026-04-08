@@ -1,98 +1,47 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-abstract class Room {
+class Bogie {
 
-    protected String roomType;
-    protected int beds;
-    protected double price;
+    String name;
+    int capacity;
 
-    public Room(String roomType, int beds, double price) {
-        this.roomType = roomType;
-        this.beds = beds;
-        this.price = price;
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 
-    public void displayDetails() {
-        System.out.println("Room Type: " + roomType);
-        System.out.println("Beds: " + beds);
-        System.out.println("Price: " + price);
+    public void display() {
+        System.out.println("Bogie: " + name + " | Capacity: " + capacity);
     }
 
 }
 
-class SingleRoom extends Room {
-    public SingleRoom() {
-        super("Single Room", 1, 1000);
-    }
-}
-
-class DoubleRoom extends Room {
-    public DoubleRoom() {
-        super("Double Room", 2, 1800);
-    }
-}
-
-class SuiteRoom extends Room {
-    public SuiteRoom() {
-        super("Suite Room", 3, 3000);
-    }
-}
-
-class RoomInventory {
-
-    private Map<String, Integer> inventory;
-
-    public RoomInventory() {
-        inventory = new HashMap<>();
-        inventory.put("Single Room", 5);
-        inventory.put("Double Room", 0);   // unavailable
-        inventory.put("Suite Room", 2);
-    }
-
-    public int getAvailability(String roomType) {
-        return inventory.getOrDefault(roomType, 0);
-    }
-
-    public Map<String, Integer> getAllAvailability() {
-        return inventory;
-    }
-
-}
-
-public class TrainConsistManagementApp {
+public class TrainConsistApp {
 
     public static void main(String[] args) {
 
         System.out.println("====================================");
-        System.out.println("   Book My Stay App - Version 4.0");
+        System.out.println("   Train Consist Management App");
         System.out.println("====================================");
 
-        RoomInventory inventory = new RoomInventory();
+        List<Bogie> bogies = new ArrayList<>();
 
-        Room single = new SingleRoom();
-        Room doubleRoom = new DoubleRoom();
-        Room suite = new SuiteRoom();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Luxury Coach", 80));
 
-        System.out.println("\n--- Available Rooms ---");
-
-        if (inventory.getAvailability("Single Room") > 0) {
-            single.displayDetails();
-            System.out.println("Available: " + inventory.getAvailability("Single Room"));
-            System.out.println();
+        System.out.println("\n--- Bogie Details ---");
+        for (Bogie b : bogies) {
+            b.display();
         }
 
-        if (inventory.getAvailability("Double Room") > 0) {
-            doubleRoom.displayDetails();
-            System.out.println("Available: " + inventory.getAvailability("Double Room"));
-            System.out.println();
-        }
+        int totalCapacity = bogies.stream()
+                .map(b -> b.capacity)
+                .reduce(0, Integer::sum);
 
-        if (inventory.getAvailability("Suite Room") > 0) {
-            suite.displayDetails();
-            System.out.println("Available: " + inventory.getAvailability("Suite Room"));
-            System.out.println();
-        }
+        System.out.println("\nTotal Seating Capacity of Train: " + totalCapacity);
     }
 
 }
